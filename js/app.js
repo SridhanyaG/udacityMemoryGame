@@ -1,7 +1,45 @@
 /*
- * Create a list that holds all of your cards
+ * Create a Layout Manager that holds all of your cards
  */
-
+var memoryGameLayoutManager = function() {
+	this.listElements = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-bomb", "fa-leaf", "fa-bicycle",
+						"fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-bomb", "fa-leaf", "fa-bicycle"];
+	this.init();
+	this.numberOfShownCards = 0;
+	this.previousSelectedElement = undefined;
+	this.currentSelectedElement = undefined;
+};
+memoryGameLayoutManager.prototype.init = function() {
+	this.listElements = shuffle(this.listElements);
+	var container = $(".deck");
+	container.empty();
+	for(let elementIndex in this.listElements) {
+		let element = this.listElements[elementIndex];
+		let liElement =  $("<li class='card' data-idx='"+elementIndex+"'> <i class='fa "+element+"'></i></li>");
+		container.append(liElement);
+	};
+};
+memoryGameLayoutManager.prototype.processCard = function(element) {
+	switch(this.numberOfShownCards % 2) {
+		case 0: // Card has to be just flipped
+				this.flipCard(element);
+				break;
+		default: // Card has to be flipped
+				 this.flipCard(element);
+				// Check Match and yes do nothing
+				// Else Revert with animation, Increase count and update star
+	}
+}
+memoryGameLayoutManager.prototype.flipCard = function(element) {
+	if (element.attr("class").indexOf("show") < 0) {
+		element.addClass("show");
+		this.previousSelectedElement = this.currentSelectedElement;
+		this.currentSelectedElement = this.listElements[element.attr("data-idx")];
+	}
+};
+memoryGameLayoutManager.prototype.matchCard = function(element) {
+	element.addClass("show");
+};
 
 /*
  * Display the cards on the page
@@ -36,3 +74,12 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+$( document ).ready(function() {
+    let memoryGameLayoutManagerObj = new memoryGameLayoutManager();
+    $(".restart").click(function() {
+    	memoryGameLayoutManagerObj.init();
+    });
+    $(".deck").on("click", ".card", function (evt) {
+    	memoryGameLayoutManagerObj.processCard($(this));
+    });
+});

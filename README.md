@@ -32,3 +32,4 @@ For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
 + If current card count is equal to number of cards , assume it is the last card and show congradulation message with You won message
     - No of Moves
     - No Of stars
++ Reset the Game by clicking the reset button
