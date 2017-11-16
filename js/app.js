@@ -10,14 +10,14 @@
         this.currentLiElemen = undefined;
         this.numberOfMoves = 0;
         this.numberOfStars = 3;
+        this.listElements = shuffle(["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-bomb", "fa-leaf", "fa-bicycle",
+                            "fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-bomb", "fa-leaf", "fa-bicycle"]);
      };
 
     /*
      * Create a Layout Manager that holds all of your cards
      */
     var MemoryGameLayoutManager = function() {
-    	this.listElements = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-bomb", "fa-leaf", "fa-bicycle",
-    						"fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube", "fa-bomb", "fa-leaf", "fa-bicycle"];
     	// Load the li elements
         this.init();
     };
@@ -25,12 +25,11 @@
     // Methods in Obj MemoryGameLayoutManager Begin
 
     MemoryGameLayoutManager.prototype.init = function() {
-        this.listElements = shuffle(this.listElements);
         this.cardProcessor = new Card();
         var container = $(".deck");
         container.empty();
-        for(let elementIndex in this.listElements) {
-            let element = this.listElements[elementIndex];
+        for(let elementIndex in this.cardProcessor.listElements) {
+            let element = this.cardProcessor.listElements[elementIndex];
             let liElement =  $("<li class='card' data-idx='"+elementIndex+"'> <i class='fa "+element+"'></i></li>");
             container.append(liElement);
         };
@@ -66,53 +65,84 @@
 
 
     MemoryGameLayoutManager.prototype.processCard = function(element) {
+        let justOpened = false;
         switch(this.cardProcessor.numberOfShownCards % 2) {
             case 0: // Card has to be just flipped
                     this.flipCard(element);
                     break;
             default: // Card has to be flipped
-                     this.flipCard(element);
+                     justOpened = this.flipCard(element);
                     // Check Match and yes do nothing
-                    this.matchCard(element);
-                    // Else Revert with animation, Increase count and update star
+                    if (justOpened) {
+                        this.matchCard(element);
+                    }
         }
     }
     MemoryGameLayoutManager.prototype.flipCard = function(element) {
-        if (element.attr("class").indexOf("show") < 0) {
+        let classList = element.attr("class");
+        if (classList.indexOf("show") < 0 && classList.indexOf("match") < 0) {
             element.addClass("open");
             element.addClass("show");
             this.cardProcessor.previousSelectedElement = this.cardProcessor.currentSelectedElement;
-            this.cardProcessor.currentSelectedElement = this.listElements[element.attr("data-idx")];
+            this.cardProcessor.currentSelectedElement = this.cardProcessor.listElements[element.attr("data-idx")];
             this.cardProcessor.previousLiElement = this.cardProcessor.currentLiElement;
             this.cardProcessor.currentLiElement = element;
             this.cardProcessor.numberOfShownCards++;
+            return true;
+        } else {
+            return false;
         }
     };
     MemoryGameLayoutManager.prototype.matchCard = function(element) {
         let delay = 1000;
         let self = this;
         this.cardProcessor.numberOfMoves++;
+        this.cardProcessor.currentLiElement.addClass("shake");
+        this.cardProcessor.previousLiElement.addClass("shake");
         $(".moves").text(this.cardProcessor.numberOfMoves);
+        $.blockUI({message: "Validating ...."});
+        if (this.cardProcessor.previousSelectedElement !== this.cardProcessor.currentSelectedElement) {
+            this.cardProcessor.previousLiElement.addClass("error");
+            this.cardProcessor.currentLiElement.addClass("error");
+            this.cardProcessor.numberOfShownCards -=2;
+        }
+        setTimeout(function() {
+            self.processMatch(element);
+        }, delay);
+    };
+    MemoryGameLayoutManager.prototype.processMatch = function(element) {
+        this.cardProcessor.previousLiElement.removeClass("show");
+        this.cardProcessor.currentLiElement.removeClass("show");
+        this.cardProcessor.previousLiElement.removeClass("open");
+        this.cardProcessor.currentLiElement.removeClass("open");
+        this.cardProcessor.previousLiElement.removeClass("shake");
+        this.cardProcessor.currentLiElement.removeClass("shake");
+        this.cardProcessor.previousLiElement.removeClass("error");
+        this.cardProcessor.currentLiElement.removeClass("error");
         if (this.cardProcessor.previousSelectedElement === this.cardProcessor.currentSelectedElement) {
             this.cardProcessor.currentLiElement.addClass("match");
             this.cardProcessor.previousLiElement.addClass("match");
+            $("#moveno").text(this.cardProcessor.numberOfMoves);
+            $("#starno").text(this.cardProcessor.numberOfStars);
             if (this.cardProcessor.numberOfShownCards === 16) {
-
-            }
-        } else {
-            this.cardProcessor.currentLiElement.effect( "shake", "slow" );
-            this.cardProcessor.previousLiElement.effect( "shake", "slow" );
-            $.blockUI({message: "Validating ...."});
-            setTimeout(function() {
-                self.cardProcessor.numberOfShownCards -= 2;
-                self.cardProcessor.previousLiElement.removeClass("show");
-                self.cardProcessor.currentLiElement.removeClass("show");
                 $.unblockUI();
-             }, delay);
-        }
+                $.blockUI({
+                    message: $('.resultPanel'),
+                    css: { 
+                        width: '50%',
+                        height: '100%',
+                        top: '10%',
+                        left: '30%'
+                    }
+                });
+                return;
+            }
+        } 
+        $.unblockUI();
+        this.cardProcessor.previousLiElement = undefined;
+        this.cardProcessor.currentLiElement = undefined;
         this.updateStar(element);
-    };
-
+    }
     // Methods in Obj MemoryGameLayoutManager End
 
 
@@ -156,6 +186,10 @@
         });
         $(".deck").on("click", ".card", function (evt) {
         	memoryGameLayoutManagerObj.processCard($(this));
+        });
+        $("#playAgainBtn").click(function() {
+            memoryGameLayoutManagerObj.restart();
+            $.unblockUI();
         });
     });
 })();

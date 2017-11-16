@@ -81,6 +81,10 @@ h1 {
     font-size: 33px;
 }
 
+.deck .card.error {
+    background: #e86730;
+    cursor: default;
+}
 /*
  * Styles for the Score Panel
  */
@@ -109,4 +113,58 @@ h1 {
 }
 .transparentBackground {
     color: white;
+}
+.resultPanel {
+    width: 660px;
+    height: 100%;
+    z-index: 10;
+    display: none
+}
+.resultPanel.show {
+    display: block;
+}
+.resultPanel {
+    margin: auto;
+    padding-top: 20%;
+    cursor: default;
+}
+.resultPanel p {
+    display: block;
+}
+.resultPanel i {
+    color: #00b200;
+    font-style: italic;
+}
+#playAgainBtn {
+    padding: 10px;
+    background-color: #02ccba;
+    font-size: 15px;
+    border-radius: 7px;
+    border: none;
+    color: #ffffff;
+}
+/* Shake Effect */
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
