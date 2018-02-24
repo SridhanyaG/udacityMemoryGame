@@ -35,6 +35,7 @@
         }
     };
 
+    /** This is for restart the game**/
     MemoryGameLayoutManager.prototype.restart = function() {
         this.init();
         this.resetStar();
@@ -43,6 +44,7 @@
 
     MemoryGameLayoutManager.prototype.updateStar = function(element) {
         let currentStarToBeModified;
+        /** Intially user is assigned with 3 stars and moves multiples of 10 the stars are removed */
         switch(this.cardProcessor.numberOfMoves) {
             case 10: currentStarToBeModified = $(".stars .fa")[2]; break;
             case 20: currentStarToBeModified = $(".stars .fa")[1]; break;
@@ -55,6 +57,7 @@
     };
 
     MemoryGameLayoutManager.prototype.resetStar = function(element) {
+       // On reset we need to reset to 3 stars
         $(".stars .fa").removeClass("fa-star-o");
         $(".stars .fa").addClass("fa-star");
     };
@@ -79,6 +82,7 @@
         }
     };
     MemoryGameLayoutManager.prototype.flipCard = function(element) {
+       // Every move card has to be flipped and housekeeping stuff of remembering the move to compare.
         let classList = element.attr("class");
         if (classList.indexOf("show") < 0 && classList.indexOf("match") < 0) {
             element.addClass("open");
@@ -94,6 +98,8 @@
         }
     };
     MemoryGameLayoutManager.prototype.matchCard = function(element) {
+      // When it is a even number move apart from flipping match has to happen
+      // Logic takes a while and hence user is stopped from clicking using block ui
         let delay = 1000;
         let self = this;
         this.cardProcessor.numberOfMoves++;
@@ -111,6 +117,7 @@
         }, delay);
     };
     MemoryGameLayoutManager.prototype.processMatch = function(element) {
+      // Match needs to show which two cards are compared with animation
         this.cardProcessor.previousLiElement.removeClass("show");
         this.cardProcessor.currentLiElement.removeClass("show");
         this.cardProcessor.previousLiElement.removeClass("open");
@@ -119,6 +126,7 @@
         this.cardProcessor.currentLiElement.removeClass("shake");
         this.cardProcessor.previousLiElement.removeClass("error");
         this.cardProcessor.currentLiElement.removeClass("error");
+        // If both are equal
         if (this.cardProcessor.previousSelectedElement === this.cardProcessor.currentSelectedElement) {
             this.cardProcessor.currentLiElement.addClass("match");
             this.cardProcessor.previousLiElement.addClass("match");
@@ -138,7 +146,7 @@
                 return;
             }
         } 
-        $.unblockUI();
+        $.unblockUI(); // UI is now unblocked to allow user interaction
         this.cardProcessor.previousLiElement = undefined;
         this.cardProcessor.currentLiElement = undefined;
         this.updateStar(element);
@@ -181,6 +189,7 @@
      */
     $( document ).ready(function() {
         let memoryGameLayoutManagerObj = new MemoryGameLayoutManager();
+        // Events for interaction
         $(".restart").click(function() {
         	memoryGameLayoutManagerObj.restart();
         });
