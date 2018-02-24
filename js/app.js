@@ -32,7 +32,7 @@
             let element = this.cardProcessor.listElements[elementIndex];
             let liElement =  $("<li class='card' data-idx='"+elementIndex+"'> <i class='fa "+element+"'></i></li>");
             container.append(liElement);
-        };
+        }
     };
 
     MemoryGameLayoutManager.prototype.restart = function() {
@@ -42,7 +42,7 @@
     };
 
     MemoryGameLayoutManager.prototype.updateStar = function(element) {
-        let currentStarToBeModified = undefined;
+        let currentStarToBeModified;
         switch(this.cardProcessor.numberOfMoves) {
             case 10: currentStarToBeModified = $(".stars .fa")[2]; break;
             case 20: currentStarToBeModified = $(".stars .fa")[1]; break;
@@ -77,7 +77,7 @@
                         this.matchCard(element);
                     }
         }
-    }
+    };
     MemoryGameLayoutManager.prototype.flipCard = function(element) {
         let classList = element.attr("class");
         if (classList.indexOf("show") < 0 && classList.indexOf("match") < 0) {
@@ -142,7 +142,7 @@
         this.cardProcessor.previousLiElement = undefined;
         this.cardProcessor.currentLiElement = undefined;
         this.updateStar(element);
-    }
+    };
     // Methods in Obj MemoryGameLayoutManager End
 
 

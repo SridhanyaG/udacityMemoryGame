@@ -38,8 +38,8 @@ h1 {
  */
 
 .deck {
-    width: 660px;
-    min-height: 680px;
+    width: 45%;
+    min-height: 42.5em;
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
     padding: 32px;
     border-radius: 10px;
@@ -53,7 +53,7 @@ h1 {
 
 .deck .card {
     height: 125px;
-    width: 125px;
+    width: 21%;
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
@@ -115,7 +115,7 @@ h1 {
     color: white;
 }
 .resultPanel {
-    width: 660px;
+    width: 60%;
     height: 100%;
     z-index: 10;
     display: none
@@ -167,4 +167,32 @@ h1 {
   40%, 60% {
     transform: translate3d(4px, 0, 0);
   }
+}
+
+
+@media only screen and (max-width: 1199px) {
+.deck {
+        width: 60%;
+    }
+}
+
+
+@media only screen and (max-width: 991px) {
+    .deck {
+        width: 60%;
+    }
+}
+
+
+@media only screen and (max-width: 767px) {
+    .deck {
+        width: 75%;
+    }
+}
+
+
+@media only screen and (max-width: 575px) {
+    .deck {
+        width: 95%;
+    }
 }
