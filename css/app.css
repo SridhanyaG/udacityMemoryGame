@@ -111,16 +111,28 @@ h1 {
     float: right;
     cursor: pointer;
 }
+.score-panel .timer {
+    float: right;
+    padding-right:10%;
+}
+.successTime {
+    color: green;
+    font-size: 1.3rem;
+}
+.failedTime {
+    color: red;
+    font-size: 1.3rem;
+}
 .transparentBackground {
     color: white;
 }
-.resultPanel {
+.resultPanel, .failedResultPanel {
     width: 60%;
     height: 100%;
     z-index: 10;
     display: none
 }
-.resultPanel.show {
+.resultPanel.show, .failedResultPanel .show {
     display: block;
 }
 .resultPanel {
@@ -135,13 +147,14 @@ h1 {
     color: #00b200;
     font-style: italic;
 }
-#playAgainBtn {
+#playAgainBtn, #failedBtn {
     padding: 10px;
     background-color: #02ccba;
     font-size: 15px;
     border-radius: 7px;
     border: none;
     color: #ffffff;
+    cursor: pointer;
 }
 /* Shake Effect */
 .shake {

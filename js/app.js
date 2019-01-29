@@ -2,6 +2,7 @@
     /* 
      * Card has variables to remember state
      */
+    $(".timerText").timer();
      var Card = function() {
         this.numberOfShownCards = 0;
         this.previousSelectedElement = undefined;
@@ -25,6 +26,7 @@
     // Methods in Obj MemoryGameLayoutManager Begin
 
     MemoryGameLayoutManager.prototype.init = function() {
+        $(".timerText").timer('reset')
         this.cardProcessor = new Card();
         var container = $(".deck");
         container.empty();
@@ -44,6 +46,22 @@
 
     MemoryGameLayoutManager.prototype.updateStar = function(element) {
         let currentStarToBeModified;
+        if (this.cardProcessor.numberOfMoves > 30) {
+            $.unblockUI();
+            $('.timerText').timer('pause');
+            $('.failedTime').text($('.timerText').html())
+
+                $.blockUI({
+                    message: $('.failedResultPanel'),
+                    css: { 
+                        width: '50%',
+                        height: '50%',
+                        top: '30%',
+                        left: '30%'
+                    }
+                });
+                return;
+        }
         /** Intially user is assigned with 3 stars and moves multiples of 10 the stars are removed */
         switch(this.cardProcessor.numberOfMoves) {
             case 10: currentStarToBeModified = $(".stars .fa")[2]; break;
@@ -132,6 +150,8 @@
             this.cardProcessor.previousLiElement.addClass("match");
             $("#moveno").text(this.cardProcessor.numberOfMoves);
             $("#starno").text(this.cardProcessor.numberOfStars);
+            $('.timerText').timer('pause');
+            $('.successTime').text($('.timerText').html())
             if (this.cardProcessor.numberOfShownCards === 16) {
                 $.unblockUI();
                 $.blockUI({
@@ -196,7 +216,7 @@
         $(".deck").on("click", ".card", function (evt) {
         	memoryGameLayoutManagerObj.processCard($(this));
         });
-        $("#playAgainBtn").click(function() {
+        $(".playAgain").click(function() {
             memoryGameLayoutManagerObj.restart();
             $.unblockUI();
         });

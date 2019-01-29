@@ -17,6 +17,7 @@
           integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
           crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timer.jquery/0.9.0/timer.jquery.min.js" integrity="sha256-9c/6JORVk2DYuJZuIgeFgms8i+7svnLEb17z/Q+tvL4=" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -29,7 +30,13 @@
             <h3>Congradulations! You Won!!</h3>
             <p>with <span id="moveno"></span> Moves and <span id="starno"></span> Stars.</p>
             <p>Wooooooooooo!</p>
-            <button id="playAgainBtn">Play again!</button>
+            <P>You took <span class="successTime"></span> to complete the game</P>
+            <button id="failedBtn" class="playAgain">Play again!</button>
+        </section>
+        <section class="failedResultPanel">
+            <h3>Better luck next time</h3>
+            <P>You took <span class="failedTime"></span> time and more than 30 moves</P>
+            <button id="playAgainBtn" class="playAgain">Play again!</button>
         </section>
         <section class="score-panel">
         	<ul class="stars">
@@ -38,11 +45,14 @@
         		<li><i class="fa fa-star"></i></li>
         	</ul>
 
-        	<span class="moves">0</span> Moves
-
+            <span class="moves">0</span> Moves
             <div class="restart" tabindex="0">
         		<i class="fa fa-repeat"></i>
-        	</div>
+            </div>
+            <div class="timer" tabindex="0">
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <span class="timerText"></span>
+            </div>
         </section>
 
         <ul class="deck">
